@@ -47,7 +47,7 @@ cache
 types
 
 # Hardhat Ignition internal deployments (regenerable)
-**/ignition/deployments/
+packages/contracts/ignition/deployments/**/*
 
 # Keep the clean frontend deployment exports
 !**/deployments/
