@@ -45,3 +45,9 @@ bundle
 artifacts
 cache
 types
+
+# Hardhat Ignition internal deployments (regenerable)
+**/ignition/deployments/
+
+# Keep the clean frontend deployment exports
+!**/deployments/
