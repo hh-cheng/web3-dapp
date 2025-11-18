@@ -1,14 +1,26 @@
 {
-	"name": "web3-contract-dapp",
-	"version": "1.0.0",
-	"scripts": {
-		"dev:web": "pnpm --filter web dev",
-		"build:web": "pnpm --filter web build",
-		"test:contracts": "pnpm --filter contracts test",
-		"deploy:contracts": "pnpm --filter contracts deploy:sepolia"
-	},
-	"packageManager": "pnpm@10.22.0",
-	"devDependencies": {
-		"@biomejs/biome": "^2.3.6"
-	}
+  "name": "web3-contract-dapp",
+  "version": "1.0.0",
+  "scripts": {
+    "prepare": "husky",
+    "dev:web": "pnpm --filter web dev",
+    "build:web": "pnpm --filter web build",
+    "test:contracts": "pnpm --filter contracts test",
+    "deploy:contracts": "pnpm --filter contracts deploy:sepolia",
+    "lint:check": "biome check ./packages/contracts/contracts ./packages/contracts/scripts",
+    "lint": "biome check --write ./packages/contracts/contracts ./packages/contracts/scripts"
+  },
+  "packageManager": "pnpm@10.22.0",
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.6",
+    "@commitlint/config-conventional": "^20.0.0",
+    "commitlint": "^20.1.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,tsx,ts,json,jsonc,css}": [
+      "biome check --write --no-errors-on-unmatched"
+    ]
+  }
 }
