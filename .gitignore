@@ -51,3 +51,7 @@ packages/contracts/ignition/deployments/**/*
 
 # Keep the clean frontend deployment exports
 !**/deployments/
+
+# The Graph
+build/
+generated/
