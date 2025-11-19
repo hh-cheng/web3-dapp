@@ -1,8 +1,8 @@
 'use client'
 import { formatUnits } from 'viem'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { useAccount, useBalance, useDisconnect } from 'wagmi'
 import { ChevronDown, LogOut, Copy, ExternalLink } from 'lucide-react'
+import { useAccount, useBalance, useDisconnect, useSwitchChain } from 'wagmi'
 
 import {
   DropdownMenu,
@@ -10,12 +10,16 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
 } from '@/components/ui/dropdown-menu'
 
 export default function Wallet() {
   const { address, isConnected, chain } = useAccount()
-  const { data: balance } = useBalance({ address })
   const { disconnect } = useDisconnect()
+  const { chains, switchChain } = useSwitchChain()
+  const { data: balance } = useBalance({ address })
 
   // Format address to short form
   const shortAddress = `${address?.slice(0, 6)}...${address?.slice(-4)}`
@@ -86,13 +90,49 @@ export default function Wallet() {
           </div>
 
           {/* Network Info */}
-          {chain && (
+          {/* {chain && (
             <div className="flex items-center gap-2 text-sm">
               <div className="w-2 h-2 bg-green-500 rounded-full" />
               <span className="text-slate-800 font-semibold">{chain.name}</span>
             </div>
-          )}
+          )} */}
         </div>
+
+        <DropdownMenuSeparator />
+
+        {/* Network Switcher */}
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger className="cursor-pointer text-slate-700">
+            <span className="w-2 h-2 bg-green-500 rounded-full" />
+            <span className="font-semibold">
+              {chain?.name || 'Select Network'}
+            </span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            {chains.map((c) => (
+              <DropdownMenuItem
+                key={c.id}
+                onClick={() => switchChain({ chainId: c.id })}
+                className="cursor-pointer text-slate-700"
+              >
+                <div className="flex items-center gap-2 w-full">
+                  <span
+                    className={`w-2 h-2 rounded-full ${
+                      chain?.id === c.id ? 'bg-green-500' : 'bg-slate-300'
+                    }`}
+                  />
+                  <span
+                    className={`font-medium ${
+                      chain?.id === c.id ? 'font-semibold text-slate-900' : ''
+                    }`}
+                  >
+                    {c.name}
+                  </span>
+                </div>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
 
         <DropdownMenuSeparator />
 
