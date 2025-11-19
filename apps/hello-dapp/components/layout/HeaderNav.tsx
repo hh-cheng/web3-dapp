@@ -1,4 +1,5 @@
 'use client'
+import Logo from '@/components/business/Logo'
 import Wallet from '@/components/business/wallet'
 import GlassSurface from '@/components/ui/GlassSurface'
 
@@ -35,7 +36,7 @@ export default function HeaderNav() {
           className="w-full flex items-center justify-between px-6 h-full"
         >
           {/* Logo/Brand */}
-          {/* <Logo /> */}
+          <Logo />
 
           {/* Navigation Pills */}
           {/* <MainMenus /> */}
