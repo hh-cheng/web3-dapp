@@ -1,0 +1,23 @@
+specVersion: 1.0.0
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Logger
+    network: sepolia
+    source:
+      address: "0x9146E804C874b4651C44685C95804A48b3F935f4"
+      abi: Logger
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - LogEntry
+      abis:
+        - name: Logger
+          file: ./abis/Logger.json
+      eventHandlers:
+        - event: DataWritten(indexed address,uint256,string)
+          handler: handleDataWritten
+      file: ./src/logger.ts

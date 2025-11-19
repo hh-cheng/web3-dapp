@@ -1,0 +1,15 @@
+{
+  "name": "@daydayup/graphs",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --studio daydayup"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.69.0",
+    "@graphprotocol/graph-ts": "^0.34.0",
+    "matchstick-as": "^0.6.0"
+  }
+}

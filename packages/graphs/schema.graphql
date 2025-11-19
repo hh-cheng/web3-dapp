@@ -1,0 +1,9 @@
+type LogEntry @entity {
+  id: Bytes!
+  sender: Bytes!
+  value: BigInt!
+  note: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
