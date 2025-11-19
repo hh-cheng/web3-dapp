@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 
+import HeaderNav from '@/components/layout/HeaderNav'
+import WalletProvider from '@/components/business/wallet/provider'
+
 import './globals.css'
 
 const firaCode = localFont({
@@ -36,7 +39,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${firaCode.variable} antialiased`}>{children}</body>
+      <body className={`${firaCode.variable} antialiased`}>
+        <WalletProvider>
+          <HeaderNav />
+          <main className="pt-32 px-8">{children}</main>
+        </WalletProvider>
+      </body>
     </html>
   )
 }

@@ -7,8 +7,8 @@
     "build:web": "pnpm --filter web build",
     "test:contracts": "pnpm --filter contracts test",
     "deploy:contracts": "pnpm --filter contracts deploy:sepolia",
-    "lint:check": "biome check ./packages/contracts/contracts ./packages/contracts/scripts",
-    "lint": "biome check --write ./packages/contracts/contracts ./packages/contracts/scripts"
+    "lint:check": "biome check ./packages/contracts/contracts ./packages/contracts/scripts ./apps/hello-dapp/app ./apps/hello-dapp/components ./apps/hello-dapp/lib",
+    "lint": "biome check --write ./packages/contracts/contracts ./packages/contracts/scripts ./apps/hello-dapp/app ./apps/hello-dapp/components ./apps/hello-dapp/lib"
   },
   "packageManager": "pnpm@10.22.0",
   "devDependencies": {
