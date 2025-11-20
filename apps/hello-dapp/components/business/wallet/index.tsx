@@ -1,8 +1,21 @@
 'use client'
 import { formatUnits } from 'viem'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { ChevronDown, LogOut, Copy, ExternalLink } from 'lucide-react'
-import { useAccount, useBalance, useDisconnect, useSwitchChain } from 'wagmi'
+import {
+  Copy,
+  LogOut,
+  ChevronDown,
+  ExternalLink,
+  Wallet as WalletIcon,
+} from 'lucide-react'
+import {
+  useChains,
+  useBalance,
+  useConnection,
+  useDisconnect,
+  useSwitchChain,
+  useSwitchConnection,
+} from 'wagmi'
 
 import {
   DropdownMenu,
@@ -16,15 +29,19 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 export default function Wallet() {
-  const { address, isConnected, chain } = useAccount()
+  const chains = useChains()
+  const connection = useConnection()
+
+  const { address, addresses, chain, isConnected } = connection
+
   const { disconnect } = useDisconnect()
-  const { chains, switchChain } = useSwitchChain()
+  const { switchChain } = useSwitchChain()
   const { data: balance } = useBalance({ address })
+  const { switchConnection } = useSwitchConnection()
 
-  // Format address to short form
+  const allAddresses = addresses || []
   const shortAddress = `${address?.slice(0, 6)}...${address?.slice(-4)}`
-
-  // Format balance
+  const currentChain = chains.find((c) => c.id === chain?.id)
   const formattedBalance = balance
     ? parseFloat(formatUnits(balance.value, balance.decimals)).toFixed(8)
     : '0.00000000'
@@ -34,9 +51,9 @@ export default function Wallet() {
   }
 
   const handleViewOnExplorer = () => {
-    if (chain?.blockExplorers?.default) {
+    if (currentChain?.blockExplorers?.default) {
       window.open(
-        `${chain.blockExplorers.default.url}/address/${address}`,
+        `${currentChain.blockExplorers.default.url}/address/${address}`,
         '_blank',
       )
     }
@@ -88,14 +105,6 @@ export default function Wallet() {
               </span>
             </div>
           </div>
-
-          {/* Network Info */}
-          {/* {chain && (
-            <div className="flex items-center gap-2 text-sm">
-              <div className="w-2 h-2 bg-green-500 rounded-full" />
-              <span className="text-slate-800 font-semibold">{chain.name}</span>
-            </div>
-          )} */}
         </div>
 
         <DropdownMenuSeparator />
@@ -105,7 +114,7 @@ export default function Wallet() {
           <DropdownMenuSubTrigger className="cursor-pointer text-slate-700">
             <span className="w-2 h-2 bg-green-500 rounded-full" />
             <span className="font-semibold">
-              {chain?.name || 'Select Network'}
+              {currentChain?.name || 'Select Network'}
             </span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
@@ -135,6 +144,47 @@ export default function Wallet() {
         </DropdownMenuSub>
 
         <DropdownMenuSeparator />
+
+        {/* Account Switcher */}
+        {allAddresses && allAddresses.length > 1 && (
+          <>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger className="cursor-pointer text-slate-700">
+                <WalletIcon size={16} />
+                <span className="font-semibold">Switch Account</span>
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                {allAddresses.map((addr: string) => (
+                  <DropdownMenuItem
+                    key={addr}
+                    onClick={() =>
+                      connection.connector &&
+                      switchConnection({ connector: connection.connector })
+                    }
+                    className="cursor-pointer text-slate-700"
+                  >
+                    <div className="flex items-center gap-2 w-full">
+                      <span
+                        className={`w-2 h-2 rounded-full ${
+                          address === addr ? 'bg-green-500' : 'bg-slate-300'
+                        }`}
+                      />
+                      <span
+                        className={`font-medium text-xs ${
+                          address === addr ? 'font-semibold text-slate-900' : ''
+                        }`}
+                      >
+                        {`${addr.slice(0, 6)}...${addr.slice(-4)}`}
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+
+            <DropdownMenuSeparator />
+          </>
+        )}
 
         {/* Actions */}
         <DropdownMenuItem
