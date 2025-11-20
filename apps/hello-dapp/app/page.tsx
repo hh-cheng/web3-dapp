@@ -1,8 +1,8 @@
 'use client'
+import Link from 'next/link'
+import { ArrowRight, Zap, Shield, Layers } from 'lucide-react'
 
 import GlassSurface from '@/components/ui/GlassSurface'
-import { ArrowRight, Zap, Shield, Layers } from 'lucide-react'
-import Link from 'next/link'
 
 export default function Home() {
   return (
