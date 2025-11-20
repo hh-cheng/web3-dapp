@@ -2,6 +2,7 @@
 import Logo from '@/components/business/Logo'
 import Wallet from '@/components/business/wallet'
 import GlassSurface from '@/components/ui/GlassSurface'
+import HeaderMenu from '@/components/business/HeaderMenu'
 
 const cssVars = {
   ['--nav-h']: '42px',
@@ -39,7 +40,7 @@ export default function HeaderNav() {
           <Logo />
 
           {/* Navigation Pills */}
-          {/* <MainMenus /> */}
+          <HeaderMenu />
 
           {/* Wallet Component (Right Side) */}
           <Wallet />
