@@ -1,5 +1,6 @@
 import { gsap } from 'gsap'
-import { useState, useRef, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 
 const ease = 'power3.easeOut'
 
@@ -20,12 +21,12 @@ const menuItems = [
 ]
 
 export default function useHeaderMenuService() {
-  const [activeHref, setActiveHref] = useState('/')
-
   const navItemsRef = useRef<HTMLDivElement | null>(null)
   const tlRefs = useRef<Array<gsap.core.Timeline | null>>([])
   const circleRefs = useRef<Array<HTMLSpanElement | null>>([])
   const activeTweenRefs = useRef<Array<gsap.core.Tween | null>>([])
+
+  const pathname = usePathname()
 
   useEffect(() => {
     const layout = () => {
@@ -121,13 +122,12 @@ export default function useHeaderMenuService() {
   }
 
   return {
-    activeHref,
-    setActiveHref,
-    navItemsRef,
-    circleRefs,
+    cssVars,
+    pathname,
     menuItems,
+    circleRefs,
+    navItemsRef,
     handleEnter,
     handleLeave,
-    cssVars,
   }
 }

@@ -15,8 +15,7 @@ const basePillClasses =
 
 export default function HeaderMenu() {
   const {
-    activeHref,
-    setActiveHref,
+    pathname,
     navItemsRef,
     circleRefs,
     menuItems,
@@ -36,7 +35,7 @@ export default function HeaderMenu() {
         style={{ gap: 'var(--pill-gap)' }}
       >
         {menuItems.map((item, i) => {
-          const isActive = activeHref === item.href
+          const isActive = pathname.startsWith(item.href)
 
           return (
             <li key={item.href} role="none" className="flex h-full">
@@ -47,7 +46,6 @@ export default function HeaderMenu() {
                 className={basePillClasses}
                 onMouseEnter={() => handleEnter(i)}
                 onMouseLeave={() => handleLeave(i)}
-                onClick={() => setActiveHref(item.href)}
               >
                 <span
                   className="hover-circle absolute left-1/2 bottom-0 rounded-full z-1 block pointer-events-none"
