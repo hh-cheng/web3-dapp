@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import type { ColumnDef } from '@tanstack/react-table'
 
 import { truncateAddress } from '@/lib/utils'
@@ -40,11 +41,12 @@ export const columns: ColumnDef<DataWritten>[] = [
     accessorKey: 'blockTimestamp',
     header: 'Timestamp',
     cell: ({ row }) => {
-      const timestamp = parseInt(row.getValue('blockTimestamp'))
-      const date = new Date(timestamp * 1000)
       return (
         <span className="text-sm text-muted-foreground">
-          {date.toLocaleDateString()} {date.toLocaleTimeString()}
+          {format(
+            new Date(Number(row.getValue('blockTimestamp')) * 1000),
+            'yyyy-MM-dd HH:mm:ss',
+          )}
         </span>
       )
     },

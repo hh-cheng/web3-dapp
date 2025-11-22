@@ -1,3 +1,4 @@
+import { Toaster } from 'sonner'
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 
@@ -49,6 +50,7 @@ export default function RootLayout({
             </main>
           </WalletProvider>
         </QueryProvider>
+        <Toaster position="top-center" richColors />
       </body>
     </html>
   )
