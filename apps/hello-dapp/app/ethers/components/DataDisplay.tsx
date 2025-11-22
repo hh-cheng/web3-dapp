@@ -127,7 +127,7 @@ function BlockSection({
   gasLimit,
 }: BlockSectionProps) {
   return (
-    <SimpleCard electric>
+    <SimpleCard>
       <div className="space-y-4">
         <h2 className="text-2xl font-semibold">Block Information</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -231,7 +231,7 @@ interface DataDisplayProps {
 
 export default function DataDisplay({ blockData }: DataDisplayProps) {
   return (
-    <div className="grid grid-cols-1 gap-6">
+    <section className="grid grid-cols-1 gap-6">
       <AccountSection
         balance={blockData.accountBalance}
         nonce={blockData.accountNonce}
@@ -248,6 +248,6 @@ export default function DataDisplay({ blockData }: DataDisplayProps) {
         baseFeePerGas={blockData.baseFeePerGas}
         priorityFeePerGas={blockData.priorityFeePerGas}
       />
-    </div>
+    </section>
   )
 }

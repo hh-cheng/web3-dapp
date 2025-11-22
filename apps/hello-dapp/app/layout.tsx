@@ -44,7 +44,9 @@ export default function RootLayout({
         <QueryProvider>
           <WalletProvider>
             <HeaderNav />
-            <main className="pt-32 px-8">{children}</main>
+            <main className="pt-32 px-8 h-screen overflow-y-auto scrollbar-hide">
+              {children}
+            </main>
           </WalletProvider>
         </QueryProvider>
       </body>

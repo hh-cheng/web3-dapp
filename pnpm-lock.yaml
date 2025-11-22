@@ -77,6 +77,9 @@ importers:
       react-router-dom:
         specifier: ^7.9.6
         version: 7.9.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      tailwind-scrollbar-hide:
+        specifier: ^4.0.0
+        version: 4.0.0(tailwindcss@4.1.17)
       three:
         specifier: ^0.181.2
         version: 0.181.2
@@ -4813,6 +4816,11 @@ packages:
 
   tailwind-merge@3.4.0:
     resolution: {integrity: sha512-uSaO4gnW+b3Y2aWoWfFpX62vn2sR3skfhbjsEnaBI81WD1wBLlHZe5sWf0AqjksNdYTbGBEd0UasQMT3SNV15g==}
+
+  tailwind-scrollbar-hide@4.0.0:
+    resolution: {integrity: sha512-gobtvVcThB2Dxhy0EeYSS1RKQJ5baDFkamkhwBvzvevwX6L4XQfpZ3me9s25Ss1ecFVT5jPYJ50n+7xTBJG9WQ==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || >= 4.0.0 || >= 4.0.0-beta.8 || >= 4.0.0-alpha.20'
 
   tailwindcss@4.1.17:
     resolution: {integrity: sha512-j9Ee2YjuQqYT9bbRTfTZht9W/ytp5H+jJpZKiYdP/bpnXARAuELt9ofP0lPnmHjbga7SNQIxdTAXCmtKVYjN+Q==}
@@ -11495,6 +11503,10 @@ snapshots:
       get-port: 3.2.0
 
   tailwind-merge@3.4.0: {}
+
+  tailwind-scrollbar-hide@4.0.0(tailwindcss@4.1.17):
+    dependencies:
+      tailwindcss: 4.1.17
 
   tailwindcss@4.1.17: {}
 
