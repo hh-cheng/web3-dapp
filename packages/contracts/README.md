@@ -55,3 +55,43 @@ After setting the variable, you can run the deployment with the Sepolia network:
 ```shell
 npx hardhat ignition deploy --network sepolia ignition/modules/Counter.ts
 ```
+
+## How to add a new contract (in this repo)
+
+1) Create the Solidity file under `packages/contracts/contracts/`, e.g. `MyToken.sol`. Example skeleton:
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.28;
+
+contract MyToken {
+  string public name = "MyToken";
+}
+```
+
+2) Add an Ignition module so we can deploy it. Create `packages/contracts/ignition/modules/MyToken.ts`:
+```ts
+import { buildModule } from '@nomicfoundation/hardhat-ignition/modules'
+
+const MyTokenModule = buildModule('MyToken', (m) => {
+  const myToken = m.contract('MyToken')
+  return { myToken }
+})
+
+export default MyTokenModule
+```
+
+3) Compile and test from the repo root (pnpm workspace):
+```bash
+pnpm --filter contracts compile
+pnpm --filter contracts test
+```
+
+4) Deploy locally or to Sepolia:
+- Local: `pnpm --filter contracts hardhat ignition deploy ignition/modules/MyToken.ts`
+- Sepolia: `pnpm --filter contracts hardhat ignition deploy --network sepolia ignition/modules/MyToken.ts` (requires `SEPOLIA_PRIVATE_KEY` set via `hardhat keystore` or env var)
+
+5) Export ABI + address for the frontend (mimic the existing Logger flow):
+- Read Ignition output in `packages/contracts/ignition/deployments/chain-<id>/`
+- Write a small script like `scripts/export-deployment.ts` (see current Logger version) to emit `packages/contracts/deployments/MyToken.json` with `{ address, abi }`
+
+Tip: keep tests in `packages/contracts/test/` and use the existing `scripts/deploy.ts` as a reference if you prefer a non-Ignition deploy script.
