@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 
 import HeaderNav from '@/components/layout/HeaderNav'
+import QueryProvider from '@/components/layout/QueryProvider'
 import WalletProvider from '@/components/business/wallet/provider'
 
 import './globals.css'
@@ -40,10 +41,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${firaCode.variable} antialiased`}>
-        <WalletProvider>
-          <HeaderNav />
-          <main className="pt-32 px-8">{children}</main>
-        </WalletProvider>
+        <QueryProvider>
+          <WalletProvider>
+            <HeaderNav />
+            <main className="pt-32 px-8">{children}</main>
+          </WalletProvider>
+        </QueryProvider>
       </body>
     </html>
   )

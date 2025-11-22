@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "prepare": "husky",
-    "dev:web": "pnpm --filter web dev",
-    "build:web": "pnpm --filter web build",
+    "dev:hello-dapp": "pnpm --filter hello-dapp dev",
+    "build:hello-dapp": "pnpm --filter hello-dapp build",
     "test:contracts": "pnpm --filter contracts test",
     "deploy:contracts": "pnpm --filter contracts deploy:sepolia",
     "lint:check": "biome check ./packages/contracts/contracts ./packages/contracts/scripts ./apps/hello-dapp/app ./apps/hello-dapp/components ./apps/hello-dapp/lib",
