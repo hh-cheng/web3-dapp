@@ -1,24 +1,20 @@
-import { gql } from 'graphql-request'
+'use client'
+import { useQuery } from '@tanstack/react-query'
 
-import { client } from '@/lib/theGraph'
-import type { GraphData } from './types'
+import { getGraphData } from './actions'
 import WriteLog from './components/WriteLog'
-import GraphTable from './components/GraphTable'
+import DataContent from './components/DataContent'
+import StatusIndicator from './components/StatusIndicator'
 
-const query = gql`
-  query GetDataWrittens {
-    dataWrittens(first: 10, orderBy: blockTimestamp, orderDirection: desc) {
-      id
-      sender
-      value
-      note
-      blockTimestamp
-    }
-  }
-`
-
-export default async function GraphPage() {
-  const data = await client.request<GraphData>(query)
+export default function GraphPage() {
+  const { data, isLoading, error } = useQuery({
+    queryFn: getGraphData,
+    queryKey: ['graphData'],
+    retry: 2, // Retry twice on failure
+    staleTime: 12 * 1000, // 12 seconds
+    refetchInterval: 12 * 1000, // Refetch every 12 seconds
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+  })
 
   return (
     <section className="sm:px-8">
@@ -28,11 +24,12 @@ export default async function GraphPage() {
           <p className="text-muted-foreground">
             Displaying the top 10 blockchain events from The Graph protocol
           </p>
+          <StatusIndicator isLoading={isLoading} />
         </div>
 
         <WriteLog />
 
-        <GraphTable data={data.dataWrittens} />
+        <DataContent isLoading={isLoading} error={error} data={data} />
       </div>
     </section>
   )
