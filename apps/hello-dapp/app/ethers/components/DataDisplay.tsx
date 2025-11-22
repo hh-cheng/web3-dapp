@@ -103,7 +103,7 @@ interface AccountSectionProps {
 
 function AccountSection({ balance, nonce }: AccountSectionProps) {
   return (
-    <SimpleCard>
+    <SimpleCard electric>
       <div className="space-y-4">
         <h2 className="text-2xl font-semibold">Account Information</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -127,7 +127,7 @@ function BlockSection({
   gasLimit,
 }: BlockSectionProps) {
   return (
-    <SimpleCard>
+    <SimpleCard electric>
       <div className="space-y-4">
         <h2 className="text-2xl font-semibold">Block Information</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
