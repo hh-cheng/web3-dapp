@@ -33,3 +33,11 @@ export function formatGasLimit(gasLimit?: string) {
   if (!gasLimit) return '-'
   return `${(+gasLimit / 1e6).toFixed(2)} M`
 }
+
+export function formatSuccess<T>(data: T) {
+  return { success: true, data, msg: '' } as const
+}
+
+export function formatError<T>(msg: string, fallbackData?: T) {
+  return { success: false, data: fallbackData ?? null, msg } as const
+}

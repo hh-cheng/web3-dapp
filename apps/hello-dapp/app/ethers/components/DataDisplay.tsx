@@ -1,8 +1,8 @@
 'use client'
 import type { ethers } from 'ethers'
 
-import SimpleCard from './SimpleCard'
 import type { EthersData } from '../types'
+import SimpleCard from '@/components/ui/SimpleCard'
 import {
   formatHash,
   weiToGwei,
