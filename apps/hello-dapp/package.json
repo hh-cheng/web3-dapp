@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "pages:build": "wrangler pages build"
+    "pages:build": "next build && npx @cloudflare/next-on-pages",
+    "pages:deploy": "pnpm pages:build && wrangler pages deploy .vercel/output/static",
+    "pages:dev": "npx @cloudflare/next-on-pages"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
