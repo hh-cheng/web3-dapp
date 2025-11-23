@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, useTransition } from 'react'
 import redPacketArtifact from 'contracts/artifacts/contracts/RedPacket.sol/RedPacket.json'
 
 import type { PacketDetail } from './types'
+import createContext from '@/lib/createContext'
 
 const RED_PACKET_CONTRACT = process.env.RED_PACKET_CONTRACT!
 
@@ -157,3 +158,5 @@ export default function useRedPacketService() {
     grabPacket,
   }
 }
+
+export const RedPacketContext = createContext(useRedPacketService)
