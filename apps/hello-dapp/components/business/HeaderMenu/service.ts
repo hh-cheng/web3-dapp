@@ -18,6 +18,7 @@ const menuItems = [
   { label: 'Ethers', href: '/ethers' },
   { label: 'RPC', href: '/rpc' },
   { label: 'TheGraph', href: '/graph' },
+  { label: 'RedPacket', href: '/redPacket' },
 ]
 
 export default function useHeaderMenuService() {

@@ -1,97 +1,205 @@
-# Sample Hardhat 3 Beta Project (`mocha` and `ethers`)
+# Contracts Package
 
-This project showcases a Hardhat 3 Beta project using `mocha` for tests and the `ethers` library for Ethereum interactions.
-
-To learn more about the Hardhat 3 Beta, please visit the [Getting Started guide](https://hardhat.org/docs/getting-started#getting-started-with-hardhat-3). To share your feedback, join our [Hardhat 3 Beta](https://hardhat.org/hardhat3-beta-telegram-group) Telegram group or [open an issue](https://github.com/NomicFoundation/hardhat/issues/new) in our GitHub issue tracker.
+Hardhat 3 Beta project for developing, testing, and deploying Solidity smart contracts.
 
 ## Project Overview
 
-This example project includes:
+This package includes:
 
-- A simple Hardhat configuration file.
-- Foundry-compatible Solidity unit tests.
-- TypeScript integration tests using `mocha` and ethers.js
-- Examples demonstrating how to connect to different types of networks, including locally simulating OP mainnet.
+- Hardhat 3 Beta configuration
+- Foundry-compatible Solidity unit tests
+- TypeScript integration tests using `mocha` and `ethers.js`
+- Ignition deployment modules
+- Network support (local, Sepolia, OP mainnet simulation)
 
-## Usage
+## Quick Start: Creating a New Contract
 
-### Running Tests
+Follow these steps to create, test, and deploy a new contract:
 
-To run all the tests in the project, execute the following command:
+### Step 1: Create the Solidity Contract
 
-```shell
-npx hardhat test
-```
+Create your contract file in `packages/contracts/contracts/`:
 
-You can also selectively run the Solidity or `mocha` tests:
-
-```shell
-npx hardhat test solidity
-npx hardhat test mocha
-```
-
-### Make a deployment to Sepolia
-
-This project includes an example Ignition module to deploy the contract. You can deploy this module to a locally simulated chain or to Sepolia.
-
-To run the deployment to a local chain:
-
-```shell
-npx hardhat ignition deploy ignition/modules/Counter.ts
-```
-
-To run the deployment to Sepolia, you need an account with funds to send the transaction. The provided Hardhat configuration includes a Configuration Variable called `SEPOLIA_PRIVATE_KEY`, which you can use to set the private key of the account you want to use.
-
-You can set the `SEPOLIA_PRIVATE_KEY` variable using the `hardhat-keystore` plugin or by setting it as an environment variable.
-
-To set the `SEPOLIA_PRIVATE_KEY` config variable using `hardhat-keystore`:
-
-```shell
-npx hardhat keystore set SEPOLIA_PRIVATE_KEY
-```
-
-After setting the variable, you can run the deployment with the Sepolia network:
-
-```shell
-npx hardhat ignition deploy --network sepolia ignition/modules/Counter.ts
-```
-
-## How to add a new contract (in this repo)
-
-1) Create the Solidity file under `packages/contracts/contracts/`, e.g. `MyToken.sol`. Example skeleton:
 ```solidity
+// packages/contracts/contracts/MyToken.sol
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
 contract MyToken {
   string public name = "MyToken";
+  
+  constructor(string memory _name) {
+    name = _name;
+  }
 }
 ```
 
-2) Add an Ignition module so we can deploy it. Create `packages/contracts/ignition/modules/MyToken.ts`:
-```ts
+### Step 2: Create an Ignition Deployment Module
+
+Create the deployment module in `packages/contracts/ignition/modules/`:
+
+```typescript
+// packages/contracts/ignition/modules/MyToken.ts
 import { buildModule } from '@nomicfoundation/hardhat-ignition/modules'
 
 const MyTokenModule = buildModule('MyToken', (m) => {
-  const myToken = m.contract('MyToken')
+  const myToken = m.contract('MyToken', ['MyToken'])
   return { myToken }
 })
 
 export default MyTokenModule
 ```
 
-3) Compile and test from the repo root (pnpm workspace):
-```bash
-pnpm --filter contracts compile
-pnpm --filter contracts test
+### Step 3: Write Tests
+
+Add tests in `packages/contracts/test/`:
+
+```typescript
+// packages/contracts/test/MyToken.test.ts
+import { expect } from 'chai'
+import { ethers } from 'hardhat'
+
+describe('MyToken', function () {
+  it('Should deploy with correct name', async function () {
+    const MyToken = await ethers.getContractFactory('MyToken')
+    const token = await MyToken.deploy('MyToken')
+    expect(await token.name()).to.equal('MyToken')
+  })
+})
 ```
 
-4) Deploy locally or to Sepolia:
-- Local: `pnpm --filter contracts hardhat ignition deploy ignition/modules/MyToken.ts`
-- Sepolia: `pnpm --filter contracts hardhat ignition deploy --network sepolia ignition/modules/MyToken.ts` (requires `SEPOLIA_PRIVATE_KEY` set via `hardhat keystore` or env var)
+### Step 4: Compile and Test
 
-5) Export ABI + address for the frontend (mimic the existing Logger flow):
-- Read Ignition output in `packages/contracts/ignition/deployments/chain-<id>/`
-- Write a small script like `scripts/export-deployment.ts` (see current Logger version) to emit `packages/contracts/deployments/MyToken.json` with `{ address, abi }`
+From the repository root:
 
-Tip: keep tests in `packages/contracts/test/` and use the existing `scripts/deploy.ts` as a reference if you prefer a non-Ignition deploy script.
+```bash
+# Compile contracts
+pnpm --filter contracts compile
+
+# Run all tests
+pnpm --filter contracts test
+
+# Run only Solidity tests
+pnpm --filter contracts test solidity
+
+# Run only TypeScript/Mocha tests
+pnpm --filter contracts test mocha
+```
+
+execute from project root
+
+```shell
+pnpm --filter contracts exec -- hardhat compile
+```
+
+### Step 5: Deploy the Contract
+
+#### Local Deployment (for testing)
+
+```bash
+pnpm --filter contracts hardhat ignition deploy ignition/modules/MyToken.ts
+```
+
+execute from project root
+
+```bash
+pnpm --filter contracts exec -- hardhat ignition deploy --network sepolia ignition/modules/<CONTRACT>.ts
+```
+
+#### Sepolia Testnet Deployment
+
+1. **Set up your private key** (choose one method):
+
+   **Option A: Using hardhat-keystore** (recommended)
+   ```bash
+   pnpm --filter contracts hardhat keystore set SEPOLIA_PRIVATE_KEY
+   ```
+
+   **Option B: Using environment variable**
+   ```bash
+   export SEPOLIA_PRIVATE_KEY=your_private_key_here
+   ```
+
+2. **Deploy to Sepolia**:
+   ```bash
+   pnpm --filter contracts hardhat ignition deploy --network sepolia ignition/modules/MyToken.ts
+   ```
+
+   > **Note**: Ensure your account has sufficient Sepolia ETH for gas fees.
+
+### Step 6: Export Deployment Artifacts
+
+After deployment, export the contract address and ABI for frontend use:
+
+1. **Check deployment output**:
+   - Location: `packages/contracts/ignition/deployments/chain-<chainId>/`
+   - Find your contract address in the deployment files
+
+2. **Create export script** (if needed):
+   - Reference: `packages/contracts/scripts/export-deployment.ts`
+   - Output: `packages/contracts/deployments/MyToken.json`
+   - Format:
+     ```json
+     {
+       "address": "0x...",
+       "abi": [...]
+     }
+     ```
+
+3. **Run export script**:
+   ```bash
+   pnpm --filter contracts hardhat run scripts/export-deployment.ts
+   ```
+
+## Development Workflow
+
+### Common Commands
+
+```bash
+# Compile contracts
+pnpm --filter contracts compile
+
+# Run tests
+pnpm --filter contracts test
+
+# Run tests in watch mode
+pnpm --filter contracts test --watch
+
+# Deploy locally
+pnpm --filter contracts hardhat ignition deploy ignition/modules/<ModuleName>.ts
+
+# Deploy to Sepolia
+pnpm --filter contracts hardhat ignition deploy --network sepolia ignition/modules/<ModuleName>.ts
+
+# Run a script
+pnpm --filter contracts hardhat run scripts/<script-name>.ts
+
+# Run a script on Sepolia
+pnpm --filter contracts hardhat run scripts/<script-name>.ts --network sepolia
+```
+
+### Project Structure
+
+```
+packages/contracts/
+├── contracts/          # Solidity source files
+├── test/              # Test files (Solidity + TypeScript)
+├── scripts/            # Deployment and utility scripts
+├── ignition/
+│   └── modules/        # Ignition deployment modules
+├── deployments/        # Exported deployment artifacts (ABI + address)
+└── hardhat.config.ts   # Hardhat configuration
+```
+
+## Additional Resources
+
+- [Hardhat 3 Beta Documentation](https://hardhat.org/docs/getting-started#getting-started-with-hardhat-3)
+- [Hardhat 3 Beta Feedback](https://hardhat.org/hardhat3-beta-telegram-group)
+- [Report Issues](https://github.com/NomicFoundation/hardhat/issues/new)
+
+## Tips
+
+- Keep tests organized in `packages/contracts/test/`
+- Use `scripts/deploy.ts` as a reference for non-Ignition deployment scripts
+- Always test contracts locally before deploying to testnets
+- Verify contract source code on block explorers after deployment

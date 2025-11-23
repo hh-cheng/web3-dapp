@@ -60,7 +60,7 @@ contract RedPacket {
   function grab(uint256 packetId) external {
     Packet storage p = packets[packetId];
     require(p.remainingShares > 0, "No remaining shares");
-    require(claimed[packetId][msg.sender] > 0, "Already claimed");
+    require(claimed[packetId][msg.sender] == 0, "Already claimed");
 
     uint256 amount;
 
